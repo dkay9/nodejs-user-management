@@ -18,7 +18,13 @@ app.set('view engine', 'ejs')
 
 //routes
 app.get('/', (req, res) => {
-    res.render('index')
+
+    const locals = {
+        title: "NodeJs",
+        description: "Free NodeJs Management System"
+    }
+
+    res.render('index', locals)
 })
 
 app.listen(port, () => {
