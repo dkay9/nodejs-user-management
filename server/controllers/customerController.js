@@ -5,16 +5,19 @@ const mongoose = require('mongoose')
 // Homepage 
 
 exports.homepage = async (req, res) => {
-
     const messages = await req.flash('info')
-
-
     const locals = {
         title: "NodeJs",
         description: "Free NodeJs Management System"
     }
 
-    res.render('index', { locals, messages })
+    try {
+        const customers = await Customer.find({}).limit(22)
+        res.render('index', { locals, messages, customers })
+    } catch (error) {
+        console.log(error)
+    }
+
 }
 
 // GET 
