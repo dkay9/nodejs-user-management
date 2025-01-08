@@ -5,20 +5,51 @@ const mongoose = require('mongoose')
 // Homepage 
 
 exports.homepage = async (req, res) => {
-    const messages = await req.flash('info')
-    const locals = {
-        title: "NodeJs",
-        description: "Free NodeJs Management System"
+        const messages = await req.flash('info')
+        const locals = {
+            title: "NodeJs",
+            description: "Free NodeJs Management System"
+        }
+
+        let perPage = 12
+        let page =  req.query.page || 1
+    
+        try {
+            const customers = await customer.aggregate([ { $sort: { updatedAt: 1 } } ])
+            .skip(perPage * page - perPage)
+            .limit(perPage)
+            .exec()
+
+            const count = await customer.count()
+            res.render("index", {
+                locals, 
+                customers,
+                current: page,
+                pages: Math.ceil(count / perPage),
+                messages
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+    
     }
 
-    try {
-        const customers = await Customer.find({}).limit(22)
-        res.render('index', { locals, messages, customers })
-    } catch (error) {
-        console.log(error)
-    }
+// exports.homepage = async (req, res) => {
+//     const messages = await req.flash('info')
+//     const locals = {
+//         title: "NodeJs",
+//         description: "Free NodeJs Management System"
+//     }
 
-}
+//     try {
+//         const customers = await Customer.find({}).limit(22)
+//         res.render('index', { locals, messages, customers })
+//     } catch (error) {
+//         console.log(error)
+//     }
+
+// }
 
 // GET 
 // New customer form 
