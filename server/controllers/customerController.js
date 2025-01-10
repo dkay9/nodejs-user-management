@@ -15,19 +15,19 @@ exports.homepage = async (req, res) => {
         let page =  req.query.page || 1
     
         try {
-            const customers = await customer.aggregate([ { $sort: { updatedAt: 1 } } ])
+            const customers = await Customer.aggregate([ { $sort: { updatedAt: 1 } } ])
             .skip(perPage * page - perPage)
             .limit(perPage)
             .exec()
 
-            const count = await customer.count()
+            const count = await Customer.countDocuments({})
             res.render("index", {
                 locals, 
                 customers,
                 current: page,
                 pages: Math.ceil(count / perPage),
                 messages
-            })
+            }) 
 
         } catch (error) {
             console.log(error)
@@ -84,4 +84,24 @@ exports.postCustomer = async (req, res) => {
         console.log(error)
     }
 
+}
+
+// GET
+// Customer Data
+exports.view = async (req, res) => {
+    try {
+        const customer = await Customer.findOne({ _id: req.params.id })
+
+        const locals = {
+            title: "View Customer Data",
+            description: "Free NodeJs User Management System"
+        }
+
+        res.render('customer/view', {
+            locals,
+            customer
+        })
+    } catch (error) {
+        console.log(error)
+    }
 }
