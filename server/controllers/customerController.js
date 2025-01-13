@@ -129,7 +129,7 @@ exports.edit = async (req, res) => {
 // Update Customer Data
 exports.editPost = async (req, res) => {
     try {
-        await customer.findOneAndUpdate(req.params.id,{
+        await Customer.findByIdAndUpdate(req.params.id,{
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             tel: req.body.tel,
