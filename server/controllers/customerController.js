@@ -125,3 +125,21 @@ exports.edit = async (req, res) => {
         console.log(error)
     }
 }
+// GET
+// Update Customer Data
+exports.editPost = async (req, res) => {
+    try {
+        await customer.findOneAndUpdate(req.params.id,{
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            tel: req.body.tel,
+            email: req.body.email,
+            details: req.body.details,
+            updatedAt: Date.now()
+        })
+
+        res.redirect(`/edit/${req.params.id}`)
+    } catch (error) {
+        console.log(error)
+    }
+}

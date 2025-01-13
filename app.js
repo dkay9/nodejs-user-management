@@ -3,6 +3,7 @@ const express = require('express')
 const expressLayout = require('express-ejs-layouts')
 // const { flash } = require('express-flash-message')
 const session = require('express-session')
+const methodOverride = require('method-override')
 
 const connectDB = require('./server/config/db')
 
@@ -11,6 +12,8 @@ const port = 5000 || process.env.PORT
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
+app.use(methodOverride('_method'))
+
 
 // npm install connect-flash
 const flash = require('connect-flash');
