@@ -143,3 +143,40 @@ exports.editPost = async (req, res) => {
         console.log(error)
     }
 }
+// DELETE
+// Delete Customer Data
+exports.deleteCustomer = async (req, res) => {
+    try {
+        await Customer.deleteOne({ _id: req.params.id })
+        res.redirect('/')
+    } catch (error) {
+        console.log(error)
+    }
+} 
+// GET
+// Search Customer Data
+exports.searchCustomers = async (req, res) => {
+    const locals = {
+      title: "Search Customer Data",
+      description: "Free NodeJs User Management System",
+    };
+  
+    try {
+      let searchTerm = req.body.searchTerm;
+      const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9 ]/g, "");
+  
+      const customers = await Customer.find({
+        $or: [
+          { firstName: { $regex: new RegExp(searchNoSpecialChar, "i") } },
+          { lastName: { $regex: new RegExp(searchNoSpecialChar, "i") } },
+        ],
+      });
+  
+      res.render("search", {
+        customers,
+        locals,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
